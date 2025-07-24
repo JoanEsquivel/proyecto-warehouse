@@ -62,6 +62,8 @@ Cada grupo deberá entregar los siguientes archivos:
 Videos de explicación del proyecto: 
 
 1. [Explicación del Proyecto - Parte 1](https://uhispano.sharepoint.com/sites/2025-Q2-GR-HE-G2-INFO-113-LABM630PM-930PM-NARANJOROJASALLANH/_layouts/15/stream.aspx?id=%2Fsites%2F2025%2DQ2%2DGR%2DHE%2DG2%2DINFO%2D113%2DLABM630PM%2D930PM%2DNARANJOROJASALLANH%2FDocumentos%20compartidos%2FGeneral%2FRecordings%2FAplicaci%C3%B3n%20de%20Bases%20de%20Datos%20%28113%29%2D20250709%5F194256%2DGrabaci%C3%B3n%20de%20la%20reuni%C3%B3n%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eb2f144b9%2De65d%2D4b1f%2Dbce0%2Db9e83e9e93c8)
+2. [Explicación del proyecto - Parte 2](https://uhispano.sharepoint.com/sites/2025-Q2-GR-HE-G2-INFO-113-LABM630PM-930PM-NARANJOROJASALLANH/_layouts/15/stream.aspx?id=%2Fsites%2F2025%2DQ2%2DGR%2DHE%2DG2%2DINFO%2D113%2DLABM630PM%2D930PM%2DNARANJOROJASALLANH%2FDocumentos%20compartidos%2FGeneral%2FRecordings%2FAplicaci%C3%B3n%20de%20Bases%20de%20Datos%20%28113%29%2D20250716%5F183042%2DGrabaci%C3%B3n%20de%20la%20reuni%C3%B3n%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Efdd609ce%2Dbf35%2D49af%2Dbcb7%2D95cf95d751e5)
+3. [Explicación del proyecto - Parte 3](https://uhispano.sharepoint.com/sites/2025-Q2-GR-HE-G2-INFO-113-LABM630PM-930PM-NARANJOROJASALLANH/_layouts/15/stream.aspx?id=%2Fsites%2F2025%2DQ2%2DGR%2DHE%2DG2%2DINFO%2D113%2DLABM630PM%2D930PM%2DNARANJOROJASALLANH%2FDocumentos%20compartidos%2FGeneral%2FRecordings%2FAplicaci%C3%B3n%20de%20Bases%20de%20Datos%20%28113%29%2D20250723%5F183024%2DGrabaci%C3%B3n%20de%20la%20reuni%C3%B3n%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ec38a0e33%2D50b2%2D4650%2D9c80%2Db728d10d9b2c)
 
 
 Resources:
