@@ -1,3 +1,7 @@
+-- Requerimiento:
+-- Insersión de datos en el modelo relacional (al menos 5 filas en las tablas de tipos y 20 filas en las tablas de producto, cliente y orden) 
+
+
 --------------------------------------------------------------------------------
 ----------------------------MODELO ENTIDAD-RELACION-----------------------------
 --------------------------------------------------------------------------------
