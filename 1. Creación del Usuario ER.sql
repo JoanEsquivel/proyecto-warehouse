@@ -1,6 +1,11 @@
 --------------------------------------------------------------------------------
--- Creación de usuario para modelo Entidad-Relación.
--- Luego crea la conexión.
+-- Creaciï¿½n de usuario para modelo Entidad-Relaciï¿½n.
+-- Luego crea la conexiï¿½n.
+
+-- Notas extraidas de clase: 
+-- _er al usuario que va a trabajar con modelo ER.
+-- _sa al usuario que va a trabajar con el staging area.
+-- _dw al usuario que va a trabajar con el datawarehouse.
 --------------------------------------------------------------------------------
 alter session set "_ORACLE_SCRIPT" = TRUE;
 DROP USER SISBANCA_ER CASCADE;
