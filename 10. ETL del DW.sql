@@ -50,6 +50,8 @@ END;
 DROP TABLE SISECOMMERCE_DW.ERROR_SA_TIPO_PRODUCTO;
 DROP TABLE SISECOMMERCE_DW.ERROR_SA_TIPO_ENVIO;
 DROP TABLE SISECOMMERCE_DW.ERROR_SA_CLIENTE;
+DROP TABLE SISECOMMERCE_DW.ERROR_SA_PRODUCTO;
+DROP TABLE SISECOMMERCE_DW.ERROR_SA_FECHA;
 
 CREATE TABLE SISECOMMERCE_DW.ERROR_SA_TIPO_PRODUCTO (
    TPD_ID             VARCHAR2(255),
@@ -69,6 +71,18 @@ CREATE TABLE SISECOMMERCE_DW.ERROR_SA_CLIENTE (
    CTE_ERROR          VARCHAR2(4000)
 );
 
+CREATE TABLE SISECOMMERCE_DW.ERROR_SA_PRODUCTO (
+   PRD_ID             VARCHAR2(255),
+   PRD_NOMBRE         VARCHAR2(255),
+   PRD_ERROR          VARCHAR2(4000)
+);
+
+CREATE TABLE SISECOMMERCE_DW.ERROR_SA_FECHA (
+   FEC_ID             VARCHAR2(255),
+   FEC_FECHA          VARCHAR2(255),
+   FEC_ERROR          VARCHAR2(4000)
+);
+
 --------------------------------------------------------------------------------
 -- Especificacion del parquete.
 --------------------------------------------------------------------------------
@@ -77,6 +91,8 @@ CREATE OR REPLACE PACKAGE SISECOMMERCE_DW.ETL_DW AS
    PROCEDURE MigrarTipoProducto;
    PROCEDURE MigrarTipoEnvio;
    PROCEDURE MigrarCliente;
+   PROCEDURE MigrarProducto;
+   PROCEDURE MigrarFecha;
    PROCEDURE MigrarDatos;
 END ETL_DW;
 /
@@ -151,7 +167,6 @@ CREATE OR REPLACE PACKAGE BODY SISECOMMERCE_DW.ETL_DW AS
          END;
       END LOOP;
    END;
-
    -- Migracion de Tipos de Envios.
    PROCEDURE MigrarTipoEnvio IS
       V_ERROR  INTEGER;
@@ -284,13 +299,139 @@ CREATE OR REPLACE PACKAGE BODY SISECOMMERCE_DW.ETL_DW AS
          END;
       END LOOP;
    END;  
-
+   -- Migracion de Productos.
+   PROCEDURE MigrarProducto IS
+      V_ERROR  INTEGER;
+      V_NUMERO INTEGER;
+      V_ERROR_MENSAJE VARCHAR2(4000);
+      CURSOR C_DATOS IS
+         SELECT P.PRD_ID,
+                P.PRD_NOMBRE
+           FROM SISECOMMERCE_SA.SA_PRODUCTO P
+          WHERE P.PRD_ID NOT IN (SELECT D.PRD_ID FROM SISECOMMERCE_DW.DIM_PRODUCTO D)
+          ORDER BY P.PRD_ID;
+   BEGIN 
+      FOR D_DATOS IN C_DATOS LOOP
+         BEGIN
+            V_ERROR := 0;
+            V_ERROR_MENSAJE := '';
+                      
+             IF D_DATOS.PRD_ID IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Nulo. ';
+             END IF;
+             --- Codigo de Producto no num rico.
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.PRD_ID) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.PRD_ID);
+                --- Codigo de Producto negativo.
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo negativo o cero. ';
+                END IF;
+             END IF;
+             -----------------------------------------------------------------------
+             IF D_DATOS.PRD_NOMBRE IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Nombre Nulo. ';
+             END IF;
+             IF LENGTH(D_DATOS.PRD_NOMBRE) > 40 THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Nombre con longitud mayor. ';
+             END IF;
+             IF LENGTH(D_DATOS.PRD_NOMBRE) < 2 THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Nombre con longitud menor. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.PRD_NOMBRE) = 'S' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Nombre numerico. ';
+             END IF;
+             -----------------------------------------------------------------------
+             IF V_ERROR = 0 THEN
+                INSERT
+                  INTO SISECOMMERCE_DW.DIM_PRODUCTO (PRD_ID, PRD_NOMBRE)
+                                        VALUES (TO_NUMBER(D_DATOS.PRD_ID), D_DATOS.PRD_NOMBRE);
+             ELSE
+                INSERT INTO SISECOMMERCE_DW.ERROR_SA_PRODUCTO (PRD_ID, PRD_NOMBRE, PRD_ERROR)
+                                                   VALUES (D_DATOS.PRD_ID, D_DATOS.PRD_NOMBRE, V_ERROR_MENSAJE);            
+             END IF;
+             EXCEPTION
+                WHEN OTHERS THEN
+                    INSERT INTO SISECOMMERCE_DW.ERROR_SA_PRODUCTO (PRD_ID, PRD_NOMBRE, PRD_ERROR)
+                                                       VALUES (D_DATOS.PRD_ID, D_DATOS.PRD_NOMBRE, 'Error al insertar');
+         END;
+      END LOOP;
+   END;
+   -- Migracion de Fechas.
+   PROCEDURE MigrarFecha IS
+      V_ERROR  INTEGER;
+      V_NUMERO INTEGER;
+      V_ERROR_MENSAJE VARCHAR2(4000);
+      CURSOR C_DATOS IS
+         SELECT O.OCP_ID,
+                O.OCP_FECHA
+           FROM SISECOMMERCE_SA.SA_ORDEN_COMPRA O
+          WHERE O.OCP_ID NOT IN (SELECT D.FEC_ID FROM SISECOMMERCE_DW.DIM_FECHA D)
+          ORDER BY O.OCP_ID;
+   BEGIN 
+      FOR D_DATOS IN C_DATOS LOOP
+         BEGIN
+            V_ERROR := 0;
+            V_ERROR_MENSAJE := '';
+                      
+             IF D_DATOS.OCP_ID IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Nulo. ';
+             END IF;
+             --- Codigo de Orden de Compra no num rico.
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.OCP_ID) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.OCP_ID);
+                --- Codigo de Orden de Compra negativo.
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo negativo o cero. ';
+                END IF;
+             END IF;
+             -----------------------------------------------------------------------
+             IF D_DATOS.OCP_FECHA IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Fecha Nula. ';
+             END IF;
+            
+             IF VALIDA_FECHA(D_DATOS.OCP_FECHA) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Fecha invalida. ';
+             END IF;
+             -----------------------------------------------------------------------
+             IF V_ERROR = 0 THEN
+                INSERT
+                  INTO SISECOMMERCE_DW.DIM_FECHA (FEC_ID, FEC_FECHA)
+                                        VALUES (TO_NUMBER(D_DATOS.OCP_ID), D_DATOS.OCP_FECHA);
+             ELSE
+                INSERT INTO SISECOMMERCE_DW.ERROR_SA_FECHA (FEC_ID, FEC_FECHA, FEC_ERROR)
+                                                   VALUES (D_DATOS.OCP_ID, D_DATOS.OCP_FECHA, V_ERROR_MENSAJE);            
+             END IF;
+             EXCEPTION
+                WHEN OTHERS THEN
+                    INSERT INTO SISECOMMERCE_DW.ERROR_SA_FECHA (FEC_ID, FEC_FECHA, FEC_ERROR)
+                                                       VALUES (D_DATOS.OCP_ID, D_DATOS.OCP_FECHA, 'Error al insertar');
+         END;
+      END LOOP;
+   END;
    -- Migracion de los datos.
    PROCEDURE MigrarDatos IS
       BEGIN
          MigrarTipoProducto;
          MigrarTipoEnvio;
          MigrarCliente;
+         MigrarProducto;
+         MigrarFecha;
          COMMIT;
       END;
 END ETL_DW;
@@ -310,6 +451,14 @@ SELECT * FROM SISECOMMERCE_DW.ERROR_SA_TIPO_ENVIO;
 -- Clientes.
 SELECT * FROM SISECOMMERCE_DW.DIM_CLIENTE;
 SELECT * FROM SISECOMMERCE_DW.ERROR_SA_CLIENTE;
+
+-- Productos.
+SELECT * FROM SISECOMMERCE_DW.DIM_PRODUCTO;
+SELECT * FROM SISECOMMERCE_DW.ERROR_SA_PRODUCTO;
+
+-- Fechas.
+SELECT * FROM SISECOMMERCE_DW.DIM_FECHA;
+SELECT * FROM SISECOMMERCE_DW.ERROR_SA_FECHA;
 
 -- Fact_Ordenes.  
 SELECT * FROM SISECOMMERCE_DW.FACT_ORDENES;
