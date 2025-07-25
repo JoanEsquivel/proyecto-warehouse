@@ -2,73 +2,98 @@
 -- Insersión de datos en el modelo relacional (al menos 5 filas en las tablas de tipos y 20 filas en las tablas de producto, cliente y orden) 
 
 
---------------------------------------------------------------------------------
-----------------------------MODELO ENTIDAD-RELACION-----------------------------
---------------------------------------------------------------------------------
+INSERT INTO TIPO_ENVIO (TPE_ID, TPE_DESCRIPCION, TPE_ESTADO, TPE_REQUIERE_CONFIRMACION) VALUES
+(1, 'Entrega San José', 1, 1),
+(2, 'Entrega Cartago', 1, 1),
+(3, 'Entrega Alajuela', 1, 0),
+(4, 'Recoleccion en bodega', 1, 0),
+(5, 'Entrega Express GAM', 1, 1),
+(6, 'Entrega Puntarenas', 1, 1),
+(7, 'Entrega Guanacaste', 1, 1);
 
-----------------------------TIPO DE CUENTAS-------------------------------------
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (1, 'Cuenta Corriente');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (2, 'Cuenta Ahorros');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (3, 'Cuenta Nómina');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (4, 'Cuenta de Inversión');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (5, 'Cuenta en Dólares');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (6, 'Cuenta Juvenil');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (7, 'Cuenta Empresarial');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (8, 'Cuenta Ahorro Programado');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (9, 'Cuenta Pensión');
-INSERT INTO TIPO_CUENTA (TCT_ID, TCT_DESCRIPCION) VALUES (10, 'Cuenta Digital');
-
-
----------------------------TIPO DE CLIENTE--------------------------------------
-INSERT INTO TIPO_CLIENTE (TCL_ID, TCL_DESCRIPCION) VALUES (1, 'Persona Física');
-INSERT INTO TIPO_CLIENTE (TCL_ID, TCL_DESCRIPCION) VALUES (2, 'Persona Jurídica');
-INSERT INTO TIPO_CLIENTE (TCL_ID, TCL_DESCRIPCION) VALUES (3, 'Estudiante');
-INSERT INTO TIPO_CLIENTE (TCL_ID, TCL_DESCRIPCION) VALUES (4, 'Pensionado');
+INSERT INTO TIPO_PRODUCTO (TPD_ID, TPD_DESCRIPCION) VALUES
+(1, 'Cafe y granos'),
+(2, 'Frutas tropicales'),
+(3, 'Productos lacteos'),
+(4, 'Verduras y hortalizas'),
+(5, 'Productos procesados'),
+(6, 'Condimentos y especias'),
+(7, 'Bebidas');
 
 
----------------------------ESTADO CLEINTE---------------------------------------
-INSERT INTO ESTADO_CLIENTE (ECT_ID, ECT_DESCRIPCION) VALUES (1, 'Activo');
-INSERT INTO ESTADO_CLIENTE (ECT_ID, ECT_DESCRIPCION) VALUES (2, 'Inactivo');
+INSERT INTO CLIENTE (CTE_ID, CTE_NOMBRE) VALUES
+(1, 'María José Vargas Solis'),
+(2, 'Carlos Eduardo Jimenez Mora'),
+(3, 'Ana Lucía Rodriguez Vega'),
+(4, 'Jose Miguel Hernandez Castro'),
+(5, 'Sofia Alejandra Murillo Sanchez'),
+(6, 'Diego Andres Calderon Perez'),
+(7, 'Gabriela Beatriz Montoya Quiros'),
+(8, 'Luis Fernando Chacon Rojas'),
+(9, 'Priscilla Nicole Zamora Aguilar'),
+(10, 'Esteban Alejandro Mendez Villalobos'),
+(11, 'Valeria Stephany Arias Campos'),
+(12, 'Roberto Carlos Fonseca Madrigal'),
+(13, 'Karla Tatiana Espinoza Gutierrez'),
+(14, 'Adrian Mauricio Cordero Lizano'),
+(15, 'Melissa Andrea Salas Barboza'),
+(16, 'Pablo Enrique Navarro Chinchilla'),
+(17, 'Natalia Fernanda Carvajal Umana'),
+(18, 'Mauricio Alonso Trejos Vindas'),
+(19, 'Daniela Carolina Alfaro Piedra'),
+(20, 'Randall Steven Porras Gamboa'),
+(21, 'Fabiola Esperanza Quesada Monge'),
+(22, 'Kenneth Alejandro Delgado Vasquez');
 
+INSERT INTO PRODUCTO (PRD_ID, PRD_TPD_ID, PRD_NOMBRE, PRD_CANTIDAD, PRD_COSTO_UNITARIO) VALUES
+(1, 1, 'Cafe Tarrazu grano oro', 50.00, 2500.00),
+(2, 1, 'Cafe Molido Tres Volcanes', 75.00, 1800.00),
+(3, 2, 'Pina Premium', 120.00, 650.00),
+(4, 2, 'Banano', 200.00, 450.00),
+(5, 2, 'Mango', 80.00, 550.00),
+(6, 3, 'Queso fresco Turrialba', 30.00, 3200.00),
+(7, 3, 'Natilla Dos Pinos 500ml', 100.00, 850.00),
+(8, 4, 'Chayote nacional', 150.00, 320.00),
+(9, 4, 'Yuca fresca', 90.00, 450.00),
+(10, 4, 'Chile dulce rojo', 60.00, 680.00),
+(11, 5, 'Gallo pinto instantáneo', 40.00, 1200.00),
+(12, 5, 'Salsa Lizano 700ml', 85.00, 950.00),
+(13, 2, 'Cas maduro', 70.00, 480.00),
+(14, 2, 'Guanábana', 25.00, 850.00),
+(15, 6, 'Achiote en polvo', 20.00, 750.00),
+(16, 6, 'Culantro castilla fresco', 45.00, 250.00),
+(17, 7, 'Agua Cristal 600ml', 200.00, 285.00),
+(18, 7, 'Refresco Tropical 2L', 60.00, 980.00),
+(19, 1, 'Frijoles negros secos', 100.00, 850.00),
+(20, 3, 'Crema dulce Dos Pinos', 80.00, 720.00),
+(21, 4, 'Nampi Morado', 55.00, 420.00),
+(22, 5, 'Chicharron Casero', 15.00, 2800.00);
 
----------------------------CLIENTES---------------------------------------------
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (1, 1, 1);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (2, 2, 1);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (3, 1, 2);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (4, 3, 1);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (5, 4, 1);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (6, 1, 1);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (7, 2, 2);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (8, 3, 1);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (9, 4, 2);
-INSERT INTO CLIENTE (CTE_ID, CTE_TCL_ID, CTE_ECT_ID) VALUES (10, 1, 1);
+INSERT INTO ORDEN_COMPRA (OCP_ID, OCP_PRD_ID, OCP_CTE_ID, OCP_TPE_ID, OCP_FECHA) VALUES
+(1, 1, 1, 1, TO_DATE('2024-01-15', 'YYYY-MM-DD')),
+(2, 5, 3, 2, TO_DATE('2024-01-18', 'YYYY-MM-DD')),
+(3, 12, 7, 4, TO_DATE('2024-01-22', 'YYYY-MM-DD')),
+(4, 8, 12, 3, TO_DATE('2024-02-01', 'YYYY-MM-DD')),
+(5, 15, 5, 5, TO_DATE('2024-02-05', 'YYYY-MM-DD')),
+(6, 3, 18, 1, TO_DATE('2024-02-10', 'YYYY-MM-DD')),
+(7, 9, 2, 6, TO_DATE('2024-02-14', 'YYYY-MM-DD')),
+(8, 20, 9, 2, TO_DATE('2024-02-18', 'YYYY-MM-DD')),
+(9, 6, 15, 4, TO_DATE('2024-02-22', 'YYYY-MM-DD')),
+(10, 11, 4, 7, TO_DATE('2024-03-01', 'YYYY-MM-DD')),
+(11, 17, 20, 3, TO_DATE('2024-03-05', 'YYYY-MM-DD')),
+(12, 2, 8, 1, TO_DATE('2024-03-08', 'YYYY-MM-DD')),
+(13, 14, 11, 5, TO_DATE('2024-03-12', 'YYYY-MM-DD')),
+(14, 4, 6, 2, TO_DATE('2024-03-15', 'YYYY-MM-DD')),
+(15, 19, 14, 4, TO_DATE('2024-03-18', 'YYYY-MM-DD')),
+(16, 7, 13, 6, TO_DATE('2024-03-22', 'YYYY-MM-DD')),
+(17, 18, 16, 1, TO_DATE('2024-03-25', 'YYYY-MM-DD')),
+(18, 10, 19, 3, TO_DATE('2024-03-28', 'YYYY-MM-DD')),
+(19, 13, 17, 7, TO_DATE('2024-04-01', 'YYYY-MM-DD')),
+(20, 16, 10, 5, TO_DATE('2024-04-05', 'YYYY-MM-DD')),
+(21, 21, 21, 2, TO_DATE('2024-04-08', 'YYYY-MM-DD')),
+(22, 22, 22, 4, TO_DATE('2024-04-12', 'YYYY-MM-DD'));
 
-
-----------------------------CUENTA----------------------------------------------
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (1, 1, 1, 'CC00123456789');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (2, 2, 2, 'CA00987654321');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (3, 3, 3, 'CN00111222333');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (4, 4, 4, 'INV0011223344');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (5, 5, 5, 'USD0044556677');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (6, 6, 6, 'JUVE0055667788');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (7, 7, 7, 'EMP0066778899');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (8, 8, 8, 'PRG0077889900');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (9, 9, 9, 'PEN0088990011');
-INSERT INTO CUENTA (CTA_ID, CTA_CTE_ID, CTA_TCT_ID, CTA_NUMERO_CUENTA) VALUES (10, 10, 10, 'DIG0099001122');
-
-
-------------------------------MOVIMIENTO----------------------------------------
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (1, 1, TO_DATE('2025-07-01', 'YYYY-MM-DD'), 1000.00);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (2, 2, TO_DATE('2025-07-02', 'YYYY-MM-DD'), 250.50);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (3, 3, TO_DATE('2025-07-03', 'YYYY-MM-DD'), -300.00);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (4, 4, TO_DATE('2025-07-04', 'YYYY-MM-DD'), 1200.75);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (5, 5, TO_DATE('2025-07-05', 'YYYY-MM-DD'), 780.00);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (6, 6, TO_DATE('2025-07-06', 'YYYY-MM-DD'), -50.25);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (7, 7, TO_DATE('2025-07-07', 'YYYY-MM-DD'), 5000.00);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (8, 8, TO_DATE('2025-07-08', 'YYYY-MM-DD'), -120.00);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (9, 9, TO_DATE('2025-07-09', 'YYYY-MM-DD'), 300.00);
-INSERT INTO MOVIMIENTO (MVM_ID, MVM_CTA_ID, MVM_FECHA, MVM_MONTO) VALUES (10, 10, TO_DATE('2025-07-10', 'YYYY-MM-DD'), 600.00);
-
+COMMIT;
 
 
 
