@@ -1,14 +1,15 @@
 --------------------------------------------------------------------------------
--- Creaci�n del Modelo Multidimensional.
+-- Creacion del Modelo Multidimensional.
 -- Se conecta con el usuario creado para el modelo DW.
 --------------------------------------------------------------------------------
 
-DROP TABLE DIM_TIPO_ENVIO;
-DROP TABLE TIPO_PRODUCTO;
+
+DROP TABLE FACT_ORDENES;        
+DROP TABLE DIM_FECHA;     
+DROP TABLE DIM_PRODUCTO;
 DROP TABLE DIM_CLIENTE;
-DROP TABLE PRODUCTO;
-DROP TABLE DIM_FECHA;
-DROP TABLE FACT_ORDENES;
+DROP TABLE DIM_TIPO_PRODUCTO;
+DROP TABLE DIM_TIPO_ENVIO;
 commit;
 
 
