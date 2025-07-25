@@ -52,6 +52,7 @@ DROP TABLE SISECOMMERCE_DW.ERROR_SA_TIPO_ENVIO;
 DROP TABLE SISECOMMERCE_DW.ERROR_SA_CLIENTE;
 DROP TABLE SISECOMMERCE_DW.ERROR_SA_PRODUCTO;
 DROP TABLE SISECOMMERCE_DW.ERROR_SA_FECHA;
+DROP TABLE SISECOMMERCE_DW.ERROR_SA_FACT_ORDENES;
 
 CREATE TABLE SISECOMMERCE_DW.ERROR_SA_TIPO_PRODUCTO (
    TPD_ID             VARCHAR2(255),
@@ -83,6 +84,19 @@ CREATE TABLE SISECOMMERCE_DW.ERROR_SA_FECHA (
    FEC_ERROR          VARCHAR2(4000)
 );
 
+CREATE TABLE SISECOMMERCE_DW.ERROR_SA_FACT_ORDENES (
+   ORD_TPE_ID         VARCHAR2(255),
+   ORD_TPD_ID         VARCHAR2(255),
+   ORD_CTE_ID         VARCHAR2(255),
+   ORD_PRD_ID         VARCHAR2(255),
+   ORD_FEC_ID         VARCHAR2(255),
+   ORD_TPE_ESTADO     VARCHAR2(255),
+   ORD_TPE_REQUIERE_CONFIRMACION VARCHAR2(255),
+   ORD_PRD_CANTIDAD   VARCHAR2(255),
+   ORD_PRD_COSTO_UNITARIO VARCHAR2(255),
+   ORD_ERROR          VARCHAR2(4000)
+);
+
 --------------------------------------------------------------------------------
 -- Especificacion del parquete.
 --------------------------------------------------------------------------------
@@ -93,6 +107,7 @@ CREATE OR REPLACE PACKAGE SISECOMMERCE_DW.ETL_DW AS
    PROCEDURE MigrarCliente;
    PROCEDURE MigrarProducto;
    PROCEDURE MigrarFecha;
+   PROCEDURE MigrarFactOrdenes;
    PROCEDURE MigrarDatos;
 END ETL_DW;
 /
@@ -424,6 +439,68 @@ CREATE OR REPLACE PACKAGE BODY SISECOMMERCE_DW.ETL_DW AS
          END;
       END LOOP;
    END;
+   -- Migracion de FACT_ORDENES.
+   PROCEDURE MigrarFactOrdenes IS
+      V_ERROR  INTEGER;
+      V_NUMERO INTEGER;
+      V_ERROR_MENSAJE VARCHAR2(4000);
+      CURSOR C_DATOS IS
+         SELECT
+            TE.TPE_ID,
+            TP.TPD_ID,
+            C.CTE_ID,
+            P.PRD_ID,
+            O.OCP_ID,
+            TE.TPE_ESTADO,
+            TE.TPE_REQUIERE_CONFIRMACION,
+            P.PRD_CANTIDAD,
+            P.PRD_COSTO_UNITARIO 
+            FROM SISECOMMERCE_SA.SA_ORDEN_COMPRA O
+            JOIN SISECOMMERCE_SA.SA_PRODUCTO P         ON O.OCP_PRD_ID = P.PRD_ID
+            JOIN SISECOMMERCE_SA.SA_TIPO_PRODUCTO TP   ON P.PRD_TPD_ID = TP.TPD_ID
+            JOIN SISECOMMERCE_SA.SA_TIPO_ENVIO TE      ON O.OCP_TPE_ID = TE.TPE_ID
+            JOIN SISECOMMERCE_SA.SA_CLIENTE C          ON O.OCP_CTE_ID = C.CTE_ID
+          WHERE TP.TPD_ID NOT IN (SELECT F.ORD_TPD_ID FROM SISECOMMERCE_DW.FACT_ORDENES F)
+          ORDER BY TP.TPD_ID;
+   BEGIN
+      FOR D_DATOS IN C_DATOS LOOP
+         BEGIN
+             V_ERROR := 0;
+             V_ERROR_MENSAJE := '';
+             -----------------------------------------------------------------------
+             -- Validacion ID Tipo de Producto.
+             IF D_DATOS.TPD_ID IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.TPD_ID) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.TPD_ID);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo negativo o cero. ';
+                END IF;
+             END IF;
+             ----- HAY QUE VALIDAR EL RESTO DE LOS DATOS ---- TODO
+             -----------------------------------------------------------------------
+             IF V_ERROR = 0 THEN
+                INSERT
+                  INTO SISECOMMERCE_DW.FACT_ORDENES (ORD_TPD_ID, ORD_TPE_ID, ORD_CTE_ID, ORD_PRD_ID, ORD_FEC_ID, ORD_TPE_ESTADO, ORD_TPE_REQUIERE_CONFIRMACION, ORD_PRD_CANTIDAD, ORD_PRD_COSTO_UNITARIO)
+                                        VALUES (TO_NUMBER(D_DATOS.TPD_ID), TO_NUMBER(D_DATOS.TPE_ID), TO_NUMBER(D_DATOS.CTE_ID), TO_NUMBER(D_DATOS.PRD_ID), TO_NUMBER(D_DATOS.OCP_ID), D_DATOS.TPE_ESTADO, D_DATOS.TPE_REQUIERE_CONFIRMACION, D_DATOS.PRD_CANTIDAD, D_DATOS.PRD_COSTO_UNITARIO);
+             ELSE
+                INSERT INTO SISECOMMERCE_DW.ERROR_SA_FACT_ORDENES (ORD_TPD_ID, ORD_TPE_ID, ORD_CTE_ID, ORD_PRD_ID, ORD_FEC_ID, ORD_TPE_ESTADO, ORD_TPE_REQUIERE_CONFIRMACION, ORD_PRD_CANTIDAD, ORD_PRD_COSTO_UNITARIO, ORD_ERROR)
+                                                   VALUES (D_DATOS.TPD_ID, D_DATOS.TPE_ID, D_DATOS.CTE_ID, D_DATOS.PRD_ID, D_DATOS.OCP_ID, D_DATOS.TPE_ESTADO, D_DATOS.TPE_REQUIERE_CONFIRMACION, D_DATOS.PRD_CANTIDAD, D_DATOS.PRD_COSTO_UNITARIO, V_ERROR_MENSAJE);            
+             END IF;
+             EXCEPTION
+                WHEN OTHERS THEN
+                    INSERT INTO SISECOMMERCE_DW.ERROR_SA_FACT_ORDENES (ORD_TPD_ID, ORD_TPE_ID, ORD_CTE_ID, ORD_PRD_ID, ORD_FEC_ID, ORD_TPE_ESTADO, ORD_TPE_REQUIERE_CONFIRMACION, ORD_PRD_CANTIDAD, ORD_PRD_COSTO_UNITARIO, ORD_ERROR)
+                                                       VALUES (D_DATOS.TPD_ID, D_DATOS.TPE_ID, D_DATOS.CTE_ID, D_DATOS.PRD_ID, D_DATOS.OCP_ID, D_DATOS.TPE_ESTADO, D_DATOS.TPE_REQUIERE_CONFIRMACION, D_DATOS.PRD_CANTIDAD, D_DATOS.PRD_COSTO_UNITARIO, 'Error al insertar');
+         END;
+      END LOOP;
+   END;
+   
    -- Migracion de los datos.
    PROCEDURE MigrarDatos IS
       BEGIN
@@ -432,6 +509,7 @@ CREATE OR REPLACE PACKAGE BODY SISECOMMERCE_DW.ETL_DW AS
          MigrarCliente;
          MigrarProducto;
          MigrarFecha;
+         MigrarFactOrdenes;
          COMMIT;
       END;
 END ETL_DW;
@@ -462,5 +540,6 @@ SELECT * FROM SISECOMMERCE_DW.ERROR_SA_FECHA;
 
 -- Fact_Ordenes.  
 SELECT * FROM SISECOMMERCE_DW.FACT_ORDENES;
+SELECT * FROM SISECOMMERCE_DW.ERROR_SA_FACT_ORDENES;
 
 
