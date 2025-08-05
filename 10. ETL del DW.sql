@@ -1,6 +1,9 @@
 --------------------------------------------------------------------------------
 -- Funcion para validar numeros enteros.
 --------------------------------------------------------------------------------
+
+-- El usuario que debe estar conectado es: SISECOMMERCE_DW
+
 CREATE OR REPLACE FUNCTION VALIDA_NUMERO_ENTERO(P_NUMERO VARCHAR2) RETURN CHAR AS
    V_NUMERO NUMBER;
 BEGIN

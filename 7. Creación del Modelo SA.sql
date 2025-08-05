@@ -3,6 +3,8 @@
 -- Se conecta con el usuario creado para el modelo ER.
 --------------------------------------------------------------------------------
 
+-- El usuario que debe estar conectado es: SISECOMMERCE_SA
+
 -- Es una copia del modelo ER, quitarle las restricciones y agregarle un prefijo SA_
 -- Ademas los tipos de datos de las columnas deben ser VARCHAR2
 

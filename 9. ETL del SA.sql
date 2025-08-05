@@ -2,6 +2,8 @@
 -- ETL DEL SA
 --------------------------------------------------------------------------------
 
+-- El usuario que debe estar conectado es: SISECOMMERCE_DW
+
 CREATE OR REPLACE PACKAGE PG_ETL_SA AS
    procedure CARGA_TIPO_PRODUCTO;
    procedure CARGA_TIPO_ENVIO;

@@ -2,6 +2,9 @@
 -- Creaci�n del Modelo Relacional.
 -- Se conecta con el usuario creado para el modelo ER.
 --------------------------------------------------------------------------------
+
+-- El usuario que debe estar conectado es: SISECOMMERCE_ER
+
 DROP TABLE ORDEN_COMPRA;
 DROP TABLE PRODUCTO;
 DROP TABLE CLIENTE;

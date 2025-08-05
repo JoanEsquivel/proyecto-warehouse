@@ -3,6 +3,8 @@
 -- Se conecta con el usuario creado para el modelo DW.
 --------------------------------------------------------------------------------
 
+-- El usuario que debe estar conectado es: SISECOMMERCE_DW
+
 
 DROP TABLE FACT_ORDENES;        
 DROP TABLE DIM_FECHA;     

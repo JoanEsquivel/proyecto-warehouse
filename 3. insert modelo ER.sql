@@ -1,6 +1,8 @@
 -- Requerimiento:
 -- Insersión de datos en el modelo relacional (al menos 5 filas en las tablas de tipos y 20 filas en las tablas de producto, cliente y orden) 
 
+-- El usuario que debe estar conectado es: SISECOMMERCE_ER
+
 -- Inserción de datos en TIPO_ENVIO
 INSERT INTO TIPO_ENVIO (TPE_ID, TPE_DESCRIPCION, TPE_ESTADO, TPE_REQUIERE_CONFIRMACION) VALUES (1, 'Entrega San José', 1, 1);
 INSERT INTO TIPO_ENVIO (TPE_ID, TPE_DESCRIPCION, TPE_ESTADO, TPE_REQUIERE_CONFIRMACION) VALUES (2, 'Entrega Cartago', 1, 1);
