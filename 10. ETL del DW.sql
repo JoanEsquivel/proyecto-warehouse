@@ -474,19 +474,138 @@ CREATE OR REPLACE PACKAGE BODY SISECOMMERCE_DW.ETL_DW AS
              -- Validacion ID Tipo de Producto.
              IF D_DATOS.TPD_ID IS NULL THEN
                 V_ERROR := 1;
-                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Nulo. ';
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Tipo de Producto Nulo. ';
              END IF;
              IF VALIDA_NUMERO_ENTERO(D_DATOS.TPD_ID) = 'N' THEN
                 V_ERROR := 1;
-                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo no numerico. ';
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Tipo de Producto no numerico. ';
              ELSE
                 V_NUMERO := TO_NUMBER(D_DATOS.TPD_ID);
                 IF V_NUMERO <= 0 THEN
                    V_ERROR := 1;
-                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo negativo o cero. ';
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Tipo de Producto negativo o cero. ';
                 END IF;
              END IF;
-             ----- HAY QUE VALIDAR EL RESTO DE LOS DATOS ---- TODO
+             -- Validar TPE_ID (INT)
+             IF D_DATOS.TPE_ID IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Tipo de Envio Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.TPE_ID) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Tipo de Envio no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.TPE_ID);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Tipo de Envio negativo o cero. ';
+                END IF;
+             END IF;
+             -- Validar CTE_ID (INT)
+             IF D_DATOS.CTE_ID IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Cliente Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.CTE_ID) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Cliente no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.CTE_ID);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Cliente negativo o cero. ';
+                END IF;
+             END IF;
+             -- Validar PRD_ID (INT)
+             IF D_DATOS.PRD_ID IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Producto Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.PRD_ID) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Producto no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.PRD_ID);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Producto negativo o cero. ';
+                END IF;
+             END IF;
+             -- Validar OCP_ID (INT)
+             IF D_DATOS.OCP_ID IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Orden de Compra Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.OCP_ID) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Orden de Compra no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.OCP_ID);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Orden de Compra negativo o cero. ';
+                END IF;
+             END IF;
+             -- Validar TPE_ESTADO (INT)
+             IF D_DATOS.TPE_ESTADO IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Estado de Envio Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.TPE_ESTADO) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Estado de Envio no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.TPE_ESTADO);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Estado de Envio negativo o cero. ';
+                END IF;
+             END IF;
+             -- Validar TPE_REQUIERE_CONFIRMACION (INT)
+             IF D_DATOS.TPE_REQUIERE_CONFIRMACION IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Requiere Confirmacion de Envio Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_ENTERO(D_DATOS.TPE_REQUIERE_CONFIRMACION) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Requiere Confirmacion de Envio no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.TPE_REQUIERE_CONFIRMACION);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Codigo Requiere Confirmacion de Envio negativo o cero. ';
+                END IF;
+             END IF;
+             -- Validar PRD_CANTIDAD (DECIMAL(10,2))
+             IF D_DATOS.PRD_CANTIDAD IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Cantidad de Producto Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_DECIMAL(D_DATOS.PRD_CANTIDAD) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Cantidad de Producto no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.PRD_CANTIDAD);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Cantidad de Producto negativo o cero. ';
+                END IF;
+             END IF;
+             -- Validar PRD_COSTO_UNITARIO (DECIMAL(20,2))
+             IF D_DATOS.PRD_COSTO_UNITARIO IS NULL THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Costo Unitario de Producto Nulo. ';
+             END IF;
+             IF VALIDA_NUMERO_DECIMAL(D_DATOS.PRD_COSTO_UNITARIO) = 'N' THEN
+                V_ERROR := 1;
+                V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Costo Unitario de Producto no numerico. ';
+             ELSE
+                V_NUMERO := TO_NUMBER(D_DATOS.PRD_COSTO_UNITARIO);
+                IF V_NUMERO <= 0 THEN
+                   V_ERROR := 1;
+                   V_ERROR_MENSAJE := V_ERROR_MENSAJE || 'Costo Unitario de Producto negativo o cero. ';
+                END IF;
+             END IF;
              -----------------------------------------------------------------------
              IF V_ERROR = 0 THEN
                 INSERT
